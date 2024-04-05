@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TodoList</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <div class="title-bar">
+    <h1>UMC Study Plan</h1>
+  </div>
+
+  <div class="separator"></div>
+  <div class="input-group">
+    <input type="text" id="taskInput" placeholder="스터디 계획을 작성해보세요!">
+  </div>
+  <div class="columns">
+    <div class="column" id="todoColumn">
+        <h3>해야 할 일</h3>
+      <ul id="taskList">
+        <!-- 해야 할 일-->
+      </ul>
+    </div>
+
+    <div class="column" id="completedColumn">
+      <h3>해낸 일</h3>
+      <ul id="completedList">
+        <!-- 해낸 일 -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
