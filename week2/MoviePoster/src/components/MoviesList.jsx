@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import MovieDetails from './MovieDetails'; // MovieDetails 컴포넌트를 임포트합니다.
-import { movies } from '../movies'; // movies 데이터를 임포트합니다. 경로는 실제 위치에 맞게 조정해주세요.
+import MovieDetails from './MovieDetails'; // MovieDetails 컴포넌트를 임포트
+import { movies } from '../movies'; // movies 데이터를 임포트
 
 function MoviesList() {
   const [hoveredMovieId, setHoveredMovieId] = useState(null);
