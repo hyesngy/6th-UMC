@@ -1,0 +1,83 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: #E1E7F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw; 
+  overflow-x: hidden; 
+}
+
+header {
+  text-align: center;
+  font-size: 15px;
+  margin-left: 120px;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130%;
+  max-width: 800px;
+  margin: 0 auto; /* 상단 margin 제거하고, 자동 마진으로 중앙 정렬 */
+  padding: 20px;
+  box-sizing: border-box; /* padding이 전체 너비에 포함되도록 */
+}
+
+#newTask {
+  width: 100%;
+  padding: 15px; /* 패딩 증가 */
+  margin: 20px 0; /* 상하 마진 조정 */
+  border: 2px solid #000000;
+  box-sizing: border-box;
+  font-size: 1em; /* 입력 필드 내 텍스트 크기 */
+}
+
+
+ul {
+  list-style: none;
+  padding: 0;
+  width: 100%; /* ul 요소 너비 조정 */
+}
+
+li {
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #B5D2ED;
+}
+
+h2 {
+  color: #333;
+  border-bottom: 2px solid #B5D2ED;
+  padding-bottom: 5px;
+}
+
+#lists-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* lists-container 너비 조정 */
+}
+
+#todo-section, #done-section {
+  width: 48%;
+  font-size: 15px;
+}
+
+li button {
+  padding: 5px 10px;
+  background-color: #B5D2ED;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+li button:hover {
+  background-color: #D5E4F2;
+}
