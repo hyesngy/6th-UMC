@@ -79,19 +79,26 @@ const MainPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const handleSearch = useCallback(debounce((query) => {
-        
-        if (query === previousSearch) return;
-        if (!query) return;
+    const debouncedSearch = useCallback(debounce((query) => {
+        if (!query || query === previousSearch) return;
+
         setPreviousSearch(query);
         setIsLoading(true);
         setError(null);
-        
+
         const options = {
             method: 'GET',
             url: 'https://api.themoviedb.org/3/search/movie',
-            params: { include_adult: 'false', page: '1', query, language: 'ko-KR' },
-            headers: { accept: 'application/json', Authorization: `Bearer ${accessToken}` }
+            params: { 
+                include_adult: 'false',
+                page: '1', 
+                query, 
+                language: 'ko-KR' 
+            },
+            headers: { 
+                accept: 'application/json', 
+                Authorization: `Bearer ${accessToken}` 
+            }
         };
 
         axios
@@ -107,17 +114,20 @@ const MainPage = () => {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, 300), [previousSearch]); 
+    }, 300), [previousSearch, accessToken]);
 
     const handleChange = (e) => {
         setSearch(e.target.value);
-        handleSearch(e.target.value);
+        debouncedSearch(e.target.value);
     };
 
     const handleMovieClick = (id) => {
         navigate(`/movie/${id}`);
     };
 
+    const handleIconClick = () => {
+        debouncedSearch(search);
+    };
 
     return (
         <>
@@ -129,8 +139,9 @@ const MainPage = () => {
                         type="text"
                         value={search}
                         onChange={handleChange}
+                        placeholder="영화 제목을 검색하세요!"
                     />
-                    <IoSearchCircle size="40" color="yellow" onClick={handleSearch(search)} />
+                    <IoSearchCircle size="40" color="yellow" onClick={handleIconClick} />
                 </Searchdiv>
 
                 {isLoading ? (
@@ -156,4 +167,5 @@ const MainPage = () => {
         </>
     )
 }
+
 export default MainPage;
