@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import styled from 'styled-components';
 import axios from "axios";
 import { IoSearchCircle } from "react-icons/io5";
