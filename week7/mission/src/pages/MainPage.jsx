@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from 'styled-components';
 import axios from "axios";
 import { IoSearchCircle } from "react-icons/io5";
@@ -77,7 +77,49 @@ const MainPage = () => {
     const [results, setResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [username, setUsername] = useState('');
+    const [isUserLoading, setIsUserLoading] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchUserData = () => {
+            const token = localStorage.getItem("userToken");
+
+            if (token) {
+                const options = {
+                    method: 'GET',
+                    url: 'http://localhost:8080/auth/me',
+                    headers: { 
+                        accept: 'application/json', 
+                        Authorization: `Bearer ${token}` 
+                    }
+                };
+
+                axios.request(options)
+                    .then(response => {
+                        setUsername(response.data.username);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching user data:", error);
+                        localStorage.removeItem("userToken");
+                        localStorage.removeItem("userNickname");
+                    })
+                    .finally(() => {
+                        setIsUserLoading(false);
+                    });
+            } else {
+                setIsUserLoading(false);
+                setUsername('');
+            }
+        };
+
+        fetchUserData();
+
+        window.addEventListener('storage', fetchUserData);
+        return () => {
+            window.removeEventListener('storage', fetchUserData);
+        };
+    }, []);
 
     const debouncedSearch = useCallback(debounce((query) => {
         if (!query || query === previousSearch) return;
@@ -131,7 +173,7 @@ const MainPage = () => {
 
     return (
         <>
-            <Banner>환영합니다</Banner>
+            <Banner>{isUserLoading ? "로딩 중..." : (username ? `${username}님 환영합니다` : '환영합니다')}</Banner>
             <FindMoviediv>
                 <Titlep>Find your movies!</Titlep>
                 <Searchdiv>

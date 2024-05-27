@@ -1,6 +1,7 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import PageContainer from "../styles/PageStyle";
 import styled from "styled-components";
+import axios from "axios";
 
 const TitleP = styled.p`
   font-size: 2vw;
@@ -26,7 +27,6 @@ const LoginInput = styled.input`
     padding: 0 1vw;
     box-sizing: border-box;
     outline: none;
-
 `
 
 const LoginButton = styled.button`
@@ -45,71 +45,97 @@ const ErrorMsg = styled.span`
   font-size: 1vw;
 `
 
-const LoginPage=() => {
-    const [formData, setFormData] = useState({
-        name: '',
-        password: '',
-      });
+const LoginPage = () => {
+  const [formData, setFormData] = useState({
+    id: '',
+    password: '',
+  });
 
-    const [errorMessage, setErrorMessage] = useState({
-        idMessage: '',
-        passwordMessage: '',
-      });
+  const [errorMessage, setErrorMessage] = useState({
+    idMessage: '',
+    passwordMessage: '',
+  });
 
-      const checkID = (id) => {
-        setFormData(prev => ({ ...prev, id: id }));
+  const checkID = (id) => {
+    setFormData(prev => ({ ...prev, id: id }));
+
+    if (!id) {
+      setErrorMessage(prev => ({ ...prev, idMessage: "아이디를 입력해주세요!" }));
+      return false;
+    } else { 
+      setErrorMessage(prev => ({ ...prev, idMessage: '' }));
+      return true;
+    }
+  };
+
+  const checkPassword = (password) => {
+    setFormData(prev => ({ ...prev, password: password }));
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,12}$/;
     
-        if (!id) {
-          setErrorMessage(prev => ({ ...prev, idMessage: "아이디를 입력해주세요!" }));
-          return false;
-        }
-        else { 
-          setErrorMessage(prev => ({ ...prev, idMessage: '' }));
-          return true;
-        }
-      };
+    if (!password) {
+      setErrorMessage(prev => ({ ...prev, passwordMessage: "비밀번호를 입력해주세요!" }));
+      return false;
+    } else if (password.length < 4) {
+      setErrorMessage(prev => ({ ...prev, passwordMessage: "최소 4자리 이상 입력해주세요." }));
+      return false;
+    } else if (password.length > 12) {
+      setErrorMessage(prev => ({ ...prev, passwordMessage: "최대 12자까지 입력 가능합니다." }));
+      return false;
+    } else if (!passwordRegex.test(password)) {
+      setErrorMessage(prev => ({ ...prev, passwordMessage: "비밀번호는 영어, 숫자, 특수문자를 포함해주세요." }));
+      return false;
+    } else {
+      setErrorMessage(prev => ({ ...prev, passwordMessage: '' }));
+      return true;
+    }
+  };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const { id, password } = formData;
+    if (id && password) {
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/auth/login",
+          {
+            username: id,
+            password: password,
+          }
+        );
 
-      const checkPassword = (password) =>{
-        setFormData(prev => ({ ...prev, password: password }));
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,12}$/;
-        
-        if (!password) {
-            setErrorMessage(prev => ({ ...prev, passwordMessage: "비밀번호를 입력해주세요!" }));
-            return false;
-        } else if (password.length < 4) {
-            setErrorMessage(prev => ({ ...prev, passwordMessage: "최소 4자리 이상 입력해주세요." }));
-            return false;
-        } else if (password.length > 12) {
-            setErrorMessage(prev => ({ ...prev, passwordMessage: "최대 12자까지 입력 가능합니다." }));
-            return false;
-        } else if (!passwordRegex.test(password)) {
-            setErrorMessage(prev => ({ ...prev, passwordMessage: "비밀번호는 영어, 숫자, 특수문자를 포함해주세요.."}));
-            return false;
+        const { token, username } = response.data;
+
+        if (token) {
+          localStorage.setItem("userToken", token);
+          localStorage.setItem("userNickname", username);
+          window.location.href = "/";
         } else {
-            setErrorMessage(prev => ({ ...prev, passwordMessage: '' }));
-            return true;
+          console.log("로그인 실패: ", response.data.message);
         }
-      };
+      } catch (error) {
+        console.log("error: ", error.response.data);
+      }
+    }
+  };
 
-    return (
-      <PageContainer>
-        <TitleP>로그인 페이지</TitleP>
-         <LoginDiv>
-            <LoginInput 
-                type="text" name="id" placeholder="아이디"
-                onChange={(e) => checkID(e.target.value)}/>
-            {errorMessage.idMessage && <ErrorMsg>{errorMessage.idMessage}</ErrorMsg>}
+  return (
+    <PageContainer>
+      <TitleP>로그인 페이지</TitleP>
+      <LoginDiv>
+        <LoginInput 
+          type="text" name="id" placeholder="아이디"
+          onChange={(e) => checkID(e.target.value)} />
+        {errorMessage.idMessage && <ErrorMsg>{errorMessage.idMessage}</ErrorMsg>}
 
-            <LoginInput 
-                type="password" name="password" placeholder="비밀번호"
-                onChange={(e) => checkPassword(e.target.value)}/>
-            {errorMessage.passwordMessage && <ErrorMsg>{errorMessage.passwordMessage}</ErrorMsg>}
+        <LoginInput 
+          type="password" name="password" placeholder="비밀번호"
+          onChange={(e) => checkPassword(e.target.value)} />
+        {errorMessage.passwordMessage && <ErrorMsg>{errorMessage.passwordMessage}</ErrorMsg>}
 
-            <LoginButton>로그인</LoginButton>
-         </LoginDiv>
-      </PageContainer>
-    )
+        <LoginButton onClick={handleLogin}>로그인</LoginButton>
+      </LoginDiv>
+    </PageContainer>
+  )
 }
 
 export default LoginPage;
