@@ -8,7 +8,7 @@ import debounce from 'lodash.debounce';
 
 const Banner = styled.div`
     width: 100%;
-    height: 35vh;
+    height: 40vh;
     display: flex;
     background: black;
     color: white;
