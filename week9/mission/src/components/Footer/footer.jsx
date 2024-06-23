@@ -14,12 +14,7 @@ const StyledFooter = styled.footer`
   font-style: italic;
   display: flex;
   justify-content: center;
-  align-items: center;
-
-  @media screen and (max-width: 768px) {
-    font-size: 12px;
-  }
-    
+  align-items: center;    
 `
 
 const Footer = () => {
