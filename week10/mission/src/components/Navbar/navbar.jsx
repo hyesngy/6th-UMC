@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { IoMdMenu } from 'react-icons/io';
+import ShareKakao from '../../api/ShareKakao';
 
 const Nav = styled.nav`
   background: #0A0E40;
@@ -134,6 +135,7 @@ const Navbar = () => {
   return (
     <Nav>
       <TitleLink to="/" $active={location.pathname === '/'}>UMC Movie</TitleLink>
+      <ShareKakao/>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div className="navbar-links">
           {!isLoggedIn ? (
