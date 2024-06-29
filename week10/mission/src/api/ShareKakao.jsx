@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import KakaoImage from '../assets/images/kakao.png';
+import KakaoImage from '../assets/kakao.png';
 
 const KakaoImg = styled.img`
     width: 1.5vw;
