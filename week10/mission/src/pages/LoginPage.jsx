@@ -118,6 +118,7 @@ const LoginPage = () => {
         const { token, username } = response.data;
 
         if (token) {
+          localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("userToken", token);
           localStorage.setItem("userNickname", username);
           window.location.href = "/";
