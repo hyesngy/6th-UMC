@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { IoMdMenu } from 'react-icons/io';
 import ShareKakao from '../../api/ShareKakao';
 import getRedirectURI from "../../RedirectURI";
@@ -18,7 +18,7 @@ const Nav = styled.nav`
   font-size: 14px;
   font-weight: bold;
   z-index: 1000;
-`;
+`
 
 const TitleContainer = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ const TitleLink = styled(RouterLink)`
     font-size: 22px;
     color: yellow;
   }
-`;
+`
 
 const Link = styled(RouterLink)`
   color: ${({ $active }) => ($active ? 'yellow' : 'white')};
@@ -53,7 +53,7 @@ const Link = styled(RouterLink)`
   @media screen and (max-width: 768px) {
     display: none;
   }
-`;
+`
 
 const LogoutButton = styled.button`
   color: ${({ $active }) => ($active ? 'yellow' : 'white')};
@@ -72,7 +72,7 @@ const LogoutButton = styled.button`
   @media screen and (max-width: 768px) {
     display: none;
   }
-`;
+`
 
 const MenuIcon = styled(IoMdMenu)`
   color: white;
@@ -83,7 +83,7 @@ const MenuIcon = styled(IoMdMenu)`
   @media screen and (min-width: 769px) {
     display: none;
   }
-`;
+`
 
 const Sidebar = styled.div`
   height: 100%;
@@ -100,7 +100,7 @@ const Sidebar = styled.div`
   @media screen and (min-width: 769px) {
     display: none;
   }
-`;
+`
 
 const SidebarLink = styled(RouterLink)`
   padding: 8px 8px 8px 32px;
@@ -113,11 +113,29 @@ const SidebarLink = styled(RouterLink)`
   &:hover {
     color: yellow;
   }
-`;
+`
+const SidebarButton = styled.button`
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  background: none;
+  border: none;
+  display: block;
+  transition: 0.3s;
+  cursor: pointer;
 
+  &:hover {
+    color: yellow;
+  }
+
+  ${({ $active }) => $active && `
+    font-weight: bold;
+    color: yellow;
+  `}
+`
 const Navbar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -192,7 +210,7 @@ const Navbar = () => {
             <SidebarLink to="/signup" onClick={toggleSidebar} $active={location.pathname === '/signup'}>회원가입</SidebarLink>
           </>
         ) : (
-          <SidebarLink as="button" onClick={handleLogout} $active={false}>로그아웃</SidebarLink>
+          <SidebarButton onClick={handleLogout} $active={false}>로그아웃</SidebarButton>
         )}
         <SidebarLink to="/popular" onClick={toggleSidebar} $active={location.pathname === '/popular'}>Popular</SidebarLink>
         <SidebarLink to="/nowplaying" onClick={toggleSidebar} $active={location.pathname === '/nowplaying'}>Now Playing</SidebarLink>
@@ -201,6 +219,6 @@ const Navbar = () => {
       </Sidebar>
     </Nav>
   );
-};
+}; 
 
 export default Navbar;
