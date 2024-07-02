@@ -64,8 +64,6 @@ const SearchInput = styled.input`
         width: 200px;
         height: 30px;
     }
-
-
 `
 const ResultContainer = styled.div`
     width: 70%;
@@ -104,8 +102,12 @@ const MainPage = () => {
     useEffect(() => {
         const fetchUserData = () => {
             const token = localStorage.getItem("userToken");
+            const kakaoUsername = localStorage.getItem("username");
 
-            if (token) {
+            if (kakaoUsername) { 
+                setUsername(kakaoUsername);
+                setIsUserLoading(false);
+            }else if (token) {
                 const options = {
                     method: 'GET',
                     url: 'http://localhost:8080/auth/me',
@@ -122,7 +124,7 @@ const MainPage = () => {
                     .catch(error => {
                         console.error("Error fetching user data:", error);
                         localStorage.removeItem("userToken");
-                        localStorage.removeItem("userNickname");
+                        localStorage.removeItem("username");
                     })
                     .finally(() => {
                         setIsUserLoading(false);

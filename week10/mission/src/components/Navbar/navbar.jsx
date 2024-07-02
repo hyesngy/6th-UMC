@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { IoMdMenu } from 'react-icons/io';
 import ShareKakao from '../../api/ShareKakao';
+import getRedirectURI from "../../RedirectURI";
 
 const Nav = styled.nav`
   background: #0A0E40;
@@ -18,6 +19,12 @@ const Nav = styled.nav`
   font-weight: bold;
   z-index: 1000;
 `;
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
 
 const TitleLink = styled(RouterLink)`
   color: white;
@@ -115,17 +122,39 @@ const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("userToken");
-    setIsLoggedIn(!!token);
+    const checkLoginStatus = () => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === 'true';
+      setIsLoggedIn(isLoggedIn);
+    };
+
+    checkLoginStatus(); 
+    window.addEventListener('storage', checkLoginStatus); 
+
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus); 
+    };
   }, []);
 
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === 'true';
+      setIsLoggedIn(isLoggedIn);
+    };
+
+    checkLoginStatus();
+  }, [location]);
+
   const handleLogout = () => {
+    const kakaoRestAPI = import.meta.env.VITE_REST_API;
+    const redirectURI = getRedirectURI();
+    const kakaoLogoutURL = `https://kauth.kakao.com/oauth/logout?client_id=${kakaoRestAPI}&logout_redirect_uri=${encodeURIComponent(redirectURI)}`;
+
     localStorage.removeItem("userToken");
-    localStorage.removeItem("userNickname");
+    localStorage.removeItem("username");
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
-    window.dispatchEvent(new Event('storage')); // Trigger storage event
-    navigate('/');
-    setSidebarOpen(false);
+    window.dispatchEvent(new Event('storage'));
+    window.location.href = kakaoLogoutURL;
   };
 
   const toggleSidebar = () => {
@@ -134,8 +163,10 @@ const Navbar = () => {
 
   return (
     <Nav>
-      <TitleLink to="/" $active={location.pathname === '/'}>UMC Movie</TitleLink>
-      <ShareKakao/>
+      <TitleContainer>
+        <TitleLink to="/" $active={location.pathname === '/'}>UMC Movie</TitleLink>
+        <ShareKakao/>
+      </TitleContainer>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div className="navbar-links">
           {!isLoggedIn ? (

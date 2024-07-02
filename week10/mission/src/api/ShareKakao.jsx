@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import KakaoImage from '../assets/kakao.png';
 
 const KakaoImg = styled.img`
-    width: 1.5vw;
+    width: 2vw;
     cursor: pointer;
-`;
+`
 
 const ShareKakao = () => {
     useEffect(() => {
