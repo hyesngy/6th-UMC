@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import PageContainer from "../styles/PageStyle";
 import styled from "styled-components";
 import axios from "axios";
@@ -99,8 +98,6 @@ const LoginPage = () => {
     idMessage: '',
     passwordMessage: '',
   });
-
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
