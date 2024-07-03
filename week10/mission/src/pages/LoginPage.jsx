@@ -117,7 +117,7 @@ const LoginPage = () => {
         if (token) {
           localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("userToken", token);
-          localStorage.setItem("userNickname", username);
+          localStorage.setItem("username", username);
           window.location.href = "/";
         } else {
           console.log("로그인 실패: ", response.data.message);
